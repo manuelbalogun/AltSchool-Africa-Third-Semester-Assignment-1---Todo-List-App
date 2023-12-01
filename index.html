@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Todo App</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #app {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      width: 300px;
+    }
+
+    h2 {
+      background-color: #ff0000;
+      color: #fff;
+      padding: 12px;
+      margin: 0;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    form {
+      margin: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    input {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #cc0000;
+    }
+
+    .todo-list {
+      margin: 20px;
+    }
+
+    .todo-item {
+      margin-bottom: 10px;
+      background-color: #fff;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .todo-item span {
+      flex-grow: 1;
+      color: #333;
+    }
+
+    .todo-item button {
+      background-color: transparent;
+      color: #ff0000;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .todo-item button:hover {
+      text-decoration: underline;
+    }
+
+    p {
+      margin: 20px;
+      color: #555;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <h2>Vue Todo App</h2>
+
+  <!-- Todo Form -->
+  <form @submit.prevent="addTodo">
+    <input v-model="newTodo" type="text" placeholder="Add a new todo" required>
+    <button type="submit">Add Todo</button>
+  </form>
+
+  <!-- Todo List -->
+  <div v-if="todos.length > 0" class="todo-list">
+    <div v-for="(todo, index) in todos" :key="index" class="todo-item">
+      <span>{{ todo.text }}</span>
+      <button @click="editTodo(index)">Edit</button>
+      <button @click="deleteTodo(index)">Delete</button>
+    </div>
+  </div>
+  <div v-else>
+    <p>No todos yet. Add one above!</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        newTodo: '',
+        todos: []
+      };
+    },
+    methods: {
+      addTodo() {
+        if (this.newTodo.trim() !== '') {
+          this.todos.push({ text: this.newTodo });
+          this.newTodo = '';
+        }
+      },
+      deleteTodo(index) {
+        this.todos.splice(index, 1);
+      },
+      editTodo(index) {
+        const updatedText = prompt('Edit your todo:', this.todos[index].text);
+        if (updatedText !== null) {
+          this.$set(this.todos, index, { text: updatedText });
+        }
+      }
+    }
+  });
+
+  app.mount('#app');
+</script>
+
+</body>
+</html>
